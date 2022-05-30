@@ -21,6 +21,7 @@ jobs:
             cp -f .circleci/resources/pytest_build_config.ini pytest.ini
             shopt -s globstar
             TESTFILES=$(circleci tests glob tests/**/test*.py | circleci tests split --split-by=timings)
+            echo $TESTFILES
             mkdir -p test-results
             shopt -u globstar
             python -m pytest --junitxml=test-results/junit.xml $TESTFILES

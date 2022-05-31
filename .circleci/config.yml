@@ -14,8 +14,6 @@ jobs:
       - image: cimg/python:3.8
     parallelism: 2
     steps:
-      - python/install-packages:
-          pkg-manager: pip
       - run:
           name: Checkout Prev Test Results
           command: |

@@ -5,8 +5,22 @@ orbs:
 workflows:
   sample:
     jobs:
+      - checkout-prev-results
       - build-and-test
 jobs:
+
+  checkout-prev-results:
+    docker:
+      - image: cimg/python:3.8
+    parallelism: 2
+    steps:
+      - python/install-packages:
+          pkg-manager: pip
+      - run:
+          name: Checkout Prev Test Results
+          command: |
+            cat "${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json" | jq .
+
   build-and-test:
     docker:
       - image: cimg/python:3.8
@@ -15,12 +29,6 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
-          
-      - run:
-        name: Check out previous test metadata
-        command: |
-          cat "${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json" | jq .
-          
       - run:
           name: Run tests
           command: |

@@ -15,6 +15,12 @@ jobs:
       - checkout
       - python/install-packages:
           pkg-manager: pip
+          
+      - run:
+        name: Check out previous test metadata
+        command: |
+          cat "${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json" | jq .
+          
       - run:
           name: Run tests
           command: |

@@ -12,17 +12,10 @@ jobs:
   checkout-prev-results:
     docker:
       - image: cimg/python:3.8
-    parallelism: 2
-    steps:
-      - run:
-          name: Checkout Prev Test Results
-          command: |
-            cat "${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json" | jq .
 
   build-and-test:
     docker:
       - image: cimg/python:3.8
-    parallelism: 2
     steps:
       - checkout
       - python/install-packages:
@@ -30,13 +23,15 @@ jobs:
       - run:
           name: Run tests
           command: |
+            pip install -r requirements.txt
             cp -f .circleci/resources/pytest_build_config.ini pytest.ini
             shopt -s globstar
-            TESTFILES=$(circleci tests glob tests/**/test*.py | circleci tests split --split-by=timings)
-            echo $TESTFILES
+            #TESTFILES=$(circleci tests glob tests/**/test*.py | circleci tests split --split-by=timings)
+            #echo $TESTFILES
             mkdir -p test-results
             shopt -u globstar
-            python -m pytest --junitxml=test-results/junit.xml $TESTFILES
+            #python -m pytest --junitxml=test-results/junit.xml $TESTFILES
+            pytest -v --junitxml="test-results/junit.xml" test_api_1.py test_api_2.py test_api_3.py test_api_4.py test_api_5.py
 
       - store_test_results:
           path: test-results

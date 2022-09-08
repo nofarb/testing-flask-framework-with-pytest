@@ -5,24 +5,12 @@ orbs:
 workflows:
   sample:
     jobs:
-      - checkout-prev-results
       - build-and-test
 jobs:
-
-  checkout-prev-results:
-    docker:
-      - image: cimg/python:3.8
-    parallelism: 2
-    steps:
-      - run:
-          name: Checkout Prev Test Results
-          command: |
-            cat "${CIRCLE_INTERNAL_TASK_DATA}/circle-test-results/results.json" | jq .
 
   build-and-test:
     docker:
       - image: cimg/python:3.8
-    parallelism: 2
     steps:
       - checkout
       - python/install-packages:
@@ -32,8 +20,9 @@ jobs:
           command: |
             cp -f .circleci/resources/pytest_build_config.ini pytest.ini
             shopt -s globstar
-            TESTFILES=$(circleci tests glob tests/**/test*.py | circleci tests split --split-by=timings)
+            #TESTFILES=$(circleci tests glob tests/**/test*.py | circleci tests split --split-by=timings)
             echo $TESTFILES
+            hello random
             mkdir -p test-results
             shopt -u globstar
             python -m pytest --junitxml=test-results/junit.xml $TESTFILES

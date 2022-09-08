@@ -5,7 +5,6 @@ orbs:
 workflows:
   sample:
     jobs:
-      - checkout-prev-results
       - build-and-test
 jobs:
 

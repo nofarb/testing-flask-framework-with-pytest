@@ -17,7 +17,7 @@ def test_get_all_books():
     assert type(res[1]) is dict
     assert res[0]['author'] == 'Havard'
     assert res[1]['author'] == 'Will'
-    assert response.status_code == 201
+    assert response.status_code == 200
     assert type(res) is list
     
 @pytest.mark.get_request
